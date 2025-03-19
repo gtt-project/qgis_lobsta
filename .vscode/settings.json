@@ -1,0 +1,10 @@
+{
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.extraPaths": [
+        "/Applications/QGIS.app/Contents/MacOS/lib/python3.9",
+        "/Applications/QGIS.app/Contents/MacOS/lib/python3.9/plugins"
+    ],
+    "python.defaultInterpreterPath": "/Applications/QGIS.app/Contents/MacOS/bin/python3",
+    "python.linting.enabled": true,
+    "python.linting.ruffEnabled": true
+}
