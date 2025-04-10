@@ -14,3 +14,18 @@ uv pip compile pyproject.toml
 ```bash
 uv run mypy --explicit-package-bases .
 ```
+
+## Development documentation
+
+### Login Diagram
+
+```mermaid
+flowchart TD
+    A[Lobsta Plugin] --> B[Click]
+    B --> C{Check login}
+    C --> |yes| D[Listup projects]
+    C --> |no| E[Login Dialog]
+    E --> F{Login}
+    F --> |yes| D
+    F --> |no| E
+```

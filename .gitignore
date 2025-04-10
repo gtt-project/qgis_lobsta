@@ -11,3 +11,6 @@ wheels/
 
 # Mypy cache
 .mypy_cache/
+
+.lsp/
+.clj-kondo/
