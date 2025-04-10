@@ -16,7 +16,6 @@ class LoginDialog(QDialog, UILoginDialog):
         self.buttonBox.rejected.connect(self.on_close)
 
     def on_login(self) -> None:
-        self.iface.messageBar().pushMessage("Login", "Login button clicked", level=Qgis.Info)
         url = self.lobsta_url_field.text()
         username = self.lobsta_user_name_field.text()
         password = self.lobsta_password_field.text()
@@ -26,12 +25,12 @@ class LoginDialog(QDialog, UILoginDialog):
         else:
             response = authenticate(url, username, password)
         if isinstance(response, dict) and all(key in response for key in User.__annotations__.keys()):
-            self.iface.messageBar().pushMessage("Login", "Login successful", level=Qgis.Success)
+            self.iface.messageBar().pushMessage(self.tr("Login"), self.tr("Login successful"), level=Qgis.Success)
             new_api_key = response["user"]["api_key"]
             store_auth_config(url, username, password, new_api_key)
             self.close()
         else:
-            self.iface.messageBar().pushMessage("Login", "Login failed", level=Qgis.Critical)
+            self.iface.messageBar().pushMessage(self.tr("Login"), self.tr("Login failed"), level=Qgis.Critical)
     
     def on_close(self) -> None:
         self.close()

@@ -1,4 +1,6 @@
+import os
 from qgis.core import Qgis
+from qgis.PyQt.QtCore import QCoreApplication, QSettings, QTranslator
 from qgis.gui import QgisInterface
 from qgis.PyQt.QtWidgets import QAction
 from .login_dialog import LoginDialog
@@ -12,6 +14,17 @@ class Lobsta:
     def __init__(self, iface: QgisInterface):
         self.iface = iface
 
+        self.plugin_dir = os.path.dirname(__file__)
+
+        locale = QSettings().value("locale/userLocale")[0:2]
+        locale_path = os.path.join(
+            self.plugin_dir, "i18n", f"lobsta_{locale}.qm"
+        )
+        if os.path.exists(locale_path):
+            self.translator = QTranslator()
+            self.translator.load(locale_path)
+            QCoreApplication.installTranslator(self.translator)
+
         # declare instance attributes
         self.actions: List[QAction] = [] # type: ignore
         self.menu = "Lobsta"
@@ -21,11 +34,14 @@ class Lobsta:
 
         self.login_dialog: Optional[LoginDialog] = None
     
+    def tr(self, message: str) -> str:
+        return QCoreApplication.translate("Lobsta", message)
+
     def initGui(self) -> None:
-        action = QAction(IconLobsta, "Login", self.iface.mainWindow())
+        action = QAction(IconLobsta, self.tr("Login"), self.iface.mainWindow())
         action.triggered.connect(self.check_login)
         self.iface.addToolBarIcon(action)
-        self.iface.addPluginToMenu("&Lobsta", action)
+        self.iface.addPluginToMenu(self.tr("&Lobsta"), action)
         self.actions.append(action)
 
     def check_login(self) -> None:
@@ -36,7 +52,7 @@ class Lobsta:
         else:
             self.base_url = None
         if auth_config and auth_config["api_key"]:
-            self.iface.messageBar().pushMessage("Login", "User is logged in", level=Qgis.Success)
+            self.iface.messageBar().pushMessage(self.tr("Login"), self.tr("User is logged in"), level=Qgis.Success)
             self.api_key = auth_config["api_key"]
         else:
             self.api_key = None
