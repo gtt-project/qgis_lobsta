@@ -6,7 +6,7 @@ from qgis.PyQt.QtWidgets import QAction
 from .login_dialog import LoginDialog
 from .ui import IconLobsta
 from typing import List, Optional
-from logic.key_management import fetch_auth_config
+from logic.key_management import fetch_auth_config, delete_auth_config
 
 class Lobsta:
     """QGIS lobsta plugin main class."""
@@ -38,8 +38,20 @@ class Lobsta:
         return QCoreApplication.translate("Lobsta", message)
 
     def initGui(self) -> None:
+        self.setupLoginAction()
+
+    def setupLoginAction(self) -> None:
+        self.clearActions()
         action = QAction(IconLobsta, self.tr("Login"), self.iface.mainWindow())
         action.triggered.connect(self.check_login)
+        self.iface.addToolBarIcon(action)
+        self.iface.addPluginToMenu(self.tr("&Lobsta"), action)
+        self.actions.append(action)
+
+    def addLogoffAction(self) -> None:
+        self.clearActions()
+        action = QAction(IconLobsta, self.tr("Logoff"), self.iface.mainWindow())
+        action.triggered.connect(self.on_logoff)
         self.iface.addToolBarIcon(action)
         self.iface.addPluginToMenu(self.tr("&Lobsta"), action)
         self.actions.append(action)
@@ -54,6 +66,7 @@ class Lobsta:
         if auth_config and auth_config["api_key"]:
             self.iface.messageBar().pushMessage(self.tr("Login"), self.tr("User is logged in"), level=Qgis.Success)
             self.api_key = auth_config["api_key"]
+            self.addLogoffAction()
         else:
             self.api_key = None
             self.on_login()
@@ -64,8 +77,21 @@ class Lobsta:
         self.login_dialog.show()
         if self.base_url:
             self.login_dialog.set_url(self.base_url)
+        self.login_dialog.set_after_login(self.check_login)
+
+    def on_logoff(self) -> None:
+        """Log off the user."""
+        delete_auth_config()
+        self.iface.messageBar().pushMessage(self.tr("Logoff"), self.tr("User logged off"), level=Qgis.Success)
+        self.api_key = None
+        self.setupLoginAction()
 
     def unload(self) -> None:
+        self.clearActions()
+
+    def clearActions(self) -> None:
+        """Clear all actions from the toolbar."""
         for action in self.actions:
             self.iface.removePluginMenu(self.menu, action)
             self.iface.removeToolBarIcon(action)
+        self.actions = []

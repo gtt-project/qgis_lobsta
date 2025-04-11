@@ -4,7 +4,7 @@ from qgis.gui import QgisInterface
 from .ui import UILoginDialog
 from logic.authenticate import authenticate, authenticate_via_api, User
 from logic.key_management import store_auth_config
-from typing import Optional
+from typing import Optional, Callable
 
 
 class LoginDialog(QDialog, UILoginDialog):
@@ -28,6 +28,8 @@ class LoginDialog(QDialog, UILoginDialog):
             self.iface.messageBar().pushMessage(self.tr("Login"), self.tr("Login successful"), level=Qgis.Success)
             new_api_key = response["user"]["api_key"]
             store_auth_config(url, username, password, new_api_key)
+            if self.after_login:
+                self.after_login()
             self.close()
         else:
             self.iface.messageBar().pushMessage(self.tr("Login"), self.tr("Login failed"), level=Qgis.Critical)
@@ -37,3 +39,6 @@ class LoginDialog(QDialog, UILoginDialog):
 
     def set_url(self, url: str) -> None:
         self.lobsta_url_field.setText(url)
+
+    def set_after_login(self, after_login: Callable) -> None:
+        self.after_login = after_login

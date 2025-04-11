@@ -42,25 +42,35 @@
 <context>
     <name>Lobsta</name>
     <message>
-        <location filename="../lobsta.py" line="55"/>
+        <location filename="../lobsta.py" line="67"/>
         <source>Login</source>
         <translation>ログイン</translation>
     </message>
     <message>
-        <location filename="../lobsta.py" line="44"/>
+        <location filename="../lobsta.py" line="56"/>
         <source>&amp;Lobsta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lobsta.py" line="55"/>
+        <location filename="../lobsta.py" line="67"/>
         <source>User is logged in</source>
         <translation>ユーザはログインしています</translation>
+    </message>
+    <message>
+        <location filename="../lobsta.py" line="85"/>
+        <source>Logoff</source>
+        <translation>ログオフ</translation>
+    </message>
+    <message>
+        <location filename="../lobsta.py" line="85"/>
+        <source>User logged off</source>
+        <translation>ユーザーはログオフしました</translation>
     </message>
 </context>
 <context>
     <name>LoginDialog</name>
     <message>
-        <location filename="../login_dialog.py" line="33"/>
+        <location filename="../login_dialog.py" line="35"/>
         <source>Login</source>
         <translation>ログイン</translation>
     </message>
@@ -70,7 +80,7 @@
         <translation>ログイン成功</translation>
     </message>
     <message>
-        <location filename="../login_dialog.py" line="33"/>
+        <location filename="../login_dialog.py" line="35"/>
         <source>Login failed</source>
         <translation>ログイン失敗</translation>
     </message>
