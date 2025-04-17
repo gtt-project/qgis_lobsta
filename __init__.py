@@ -17,4 +17,5 @@ sys.path.append(os.path.dirname(__file__))
 def classFactory(iface: QgisInterface) -> "Lobsta":
     """Load Lobsta class from file lobsta.py."""
     from .lobsta import Lobsta
+
     return Lobsta(iface)

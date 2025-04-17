@@ -8,6 +8,7 @@ from .ui import IconLobsta
 from typing import List, Optional
 from logic.key_management import fetch_auth_config, delete_auth_config
 
+
 class Lobsta:
     """QGIS lobsta plugin main class."""
 
@@ -17,23 +18,21 @@ class Lobsta:
         self.plugin_dir = os.path.dirname(__file__)
 
         locale = QSettings().value("locale/userLocale")[0:2]
-        locale_path = os.path.join(
-            self.plugin_dir, "i18n", f"lobsta_{locale}.qm"
-        )
+        locale_path = os.path.join(self.plugin_dir, "i18n", f"lobsta_{locale}.qm")
         if os.path.exists(locale_path):
             self.translator = QTranslator()
             self.translator.load(locale_path)
             QCoreApplication.installTranslator(self.translator)
 
         # declare instance attributes
-        self.actions: List[QAction] = [] # type: ignore
+        self.actions: List[QAction] = []  # type: ignore
         self.menu = "Lobsta"
 
         self.toolbar = self.iface.addToolBar("Lobsta")
         self.toolbar.setObjectName("Lobsta")
 
         self.login_dialog: Optional[LoginDialog] = None
-    
+
     def tr(self, message: str) -> str:
         return QCoreApplication.translate("Lobsta", message)
 
@@ -64,7 +63,9 @@ class Lobsta:
         else:
             self.base_url = None
         if auth_config and auth_config["api_key"]:
-            self.iface.messageBar().pushMessage(self.tr("Login"), self.tr("User is logged in"), level=Qgis.Success)
+            self.iface.messageBar().pushMessage(
+                self.tr("Login"), self.tr("User is logged in"), level=Qgis.Success
+            )
             self.api_key = auth_config["api_key"]
             self.addLogoffAction()
         else:
@@ -82,7 +83,9 @@ class Lobsta:
     def on_logoff(self) -> None:
         """Log off the user."""
         delete_auth_config()
-        self.iface.messageBar().pushMessage(self.tr("Logoff"), self.tr("User logged off"), level=Qgis.Success)
+        self.iface.messageBar().pushMessage(
+            self.tr("Logoff"), self.tr("User logged off"), level=Qgis.Success
+        )
         self.api_key = None
         self.setupLoginAction()
 

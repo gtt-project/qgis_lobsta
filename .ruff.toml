@@ -1,0 +1,5 @@
+line-length = 88
+target-version = "py39"
+
+[format]
+indent-style = "space"

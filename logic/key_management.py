@@ -1,9 +1,11 @@
 from qgis.core import QgsApplication, QgsAuthMethodConfig
 from typing import Optional, TypedDict
 
+
 class LoggedInUser(TypedDict):
     url: str
     api_key: str
+
 
 def fetch_config_id() -> Optional[str]:
     """Fetch the configuration ID for Lobsta."""
@@ -14,6 +16,7 @@ def fetch_config_id() -> Optional[str]:
         if auth_config.name() == "Lobsta-Website":
             return config_id
     return None
+
 
 def fetch_auth_config() -> Optional[LoggedInUser]:
     """Fetch the authentication configuration for Lobsta."""
@@ -28,6 +31,7 @@ def fetch_auth_config() -> Optional[LoggedInUser]:
         }
     return None
 
+
 def store_auth_config(url: str, username: str, password: str, api_key: str) -> None:
     """Store the authentication configuration for Lobsta."""
     auth_mgr = QgsApplication.authManager()
@@ -41,10 +45,11 @@ def store_auth_config(url: str, username: str, password: str, api_key: str) -> N
     http_config.setMethod("APIHeader")
     http_config.setUri(url)
     http_config.setConfig("X-Redmine-API-Key", api_key)
-    
+
     assert http_config.isValid()
 
     auth_mgr.storeAuthenticationConfig(http_config, overwrite=True)
+
 
 def delete_auth_config() -> None:
     """Delete the authentication configuration for Lobsta."""

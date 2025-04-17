@@ -24,16 +24,22 @@ class LoginDialog(QDialog, UILoginDialog):
             response = authenticate_via_api(url, api_key)
         else:
             response = authenticate(url, username, password)
-        if isinstance(response, dict) and all(key in response for key in User.__annotations__.keys()):
-            self.iface.messageBar().pushMessage(self.tr("Login"), self.tr("Login successful"), level=Qgis.Success)
+        if isinstance(response, dict) and all(
+            key in response for key in User.__annotations__.keys()
+        ):
+            self.iface.messageBar().pushMessage(
+                self.tr("Login"), self.tr("Login successful"), level=Qgis.Success
+            )
             new_api_key = response["user"]["api_key"]
             store_auth_config(url, username, password, new_api_key)
             if self.after_login:
                 self.after_login()
             self.close()
         else:
-            self.iface.messageBar().pushMessage(self.tr("Login"), self.tr("Login failed"), level=Qgis.Critical)
-    
+            self.iface.messageBar().pushMessage(
+                self.tr("Login"), self.tr("Login failed"), level=Qgis.Critical
+            )
+
     def on_close(self) -> None:
         self.close()
 
