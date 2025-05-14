@@ -102,6 +102,7 @@ class Lobsta:
             self.project_dialog.set_base_url(self.base_url)
         self.project_dialog.show()
         self.project_dialog.set_open_issues_dialog(self.on_issues)
+        self.issues_dialog = None
 
     def on_issues(self, project_id: int) -> None:
         """Open the issues dialog."""
@@ -122,6 +123,8 @@ class Lobsta:
             self.tr("Logoff"), self.tr("User logged off"), level=Qgis.Success
         )
         self.api_key = None
+        self.project_dialog = None
+        self.issues_dialog = None
         self.setupLoginAction()
 
     def unload(self) -> None:
