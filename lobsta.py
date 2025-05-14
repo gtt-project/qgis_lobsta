@@ -4,6 +4,8 @@ from qgis.PyQt.QtCore import QCoreApplication, QSettings, QTranslator
 from qgis.gui import QgisInterface
 from qgis.PyQt.QtWidgets import QAction
 from .login_dialog import LoginDialog
+from .project_dialog import ProjectDialog
+from .issues_dialog import IssuesDialog
 from .ui import IconLobsta
 from typing import List, Optional
 from logic.key_management import fetch_auth_config, delete_auth_config
@@ -32,6 +34,10 @@ class Lobsta:
         self.toolbar.setObjectName("Lobsta")
 
         self.login_dialog: Optional[LoginDialog] = None
+        self.project_dialog: Optional[ProjectDialog] = None
+        self.issues_dialog: Optional[IssuesDialog] = None
+        self.api_key: Optional[str] = None
+        self.base_url: Optional[str] = None
 
     def tr(self, message: str) -> str:
         return QCoreApplication.translate("Lobsta", message)
@@ -47,11 +53,16 @@ class Lobsta:
         self.iface.addPluginToMenu(self.tr("&Lobsta"), action)
         self.actions.append(action)
 
+    def addProjectAction(self) -> None:
+        action = QAction(IconLobsta, self.tr("Projects"), self.iface.mainWindow())
+        action.triggered.connect(self.on_projects)
+        self.iface.addToolBarIcon(action)
+        self.iface.addPluginToMenu(self.tr("&Lobsta"), action)
+        self.actions.append(action)
+
     def addLogoffAction(self) -> None:
-        self.clearActions()
         action = QAction(IconLobsta, self.tr("Logoff"), self.iface.mainWindow())
         action.triggered.connect(self.on_logoff)
-        self.iface.addToolBarIcon(action)
         self.iface.addPluginToMenu(self.tr("&Lobsta"), action)
         self.actions.append(action)
 
@@ -67,6 +78,8 @@ class Lobsta:
                 self.tr("Login"), self.tr("User is logged in"), level=Qgis.Success
             )
             self.api_key = auth_config["api_key"]
+            self.clearActions()
+            self.addProjectAction()
             self.addLogoffAction()
         else:
             self.api_key = None
@@ -79,6 +92,28 @@ class Lobsta:
         if self.base_url:
             self.login_dialog.set_url(self.base_url)
         self.login_dialog.set_after_login(self.check_login)
+
+    def on_projects(self) -> None:
+        if not self.project_dialog:
+            self.project_dialog = ProjectDialog(self.iface)
+        if self.api_key:
+            self.project_dialog.set_api_key(self.api_key)
+        if self.base_url:
+            self.project_dialog.set_base_url(self.base_url)
+        self.project_dialog.show()
+        self.project_dialog.set_open_issues_dialog(self.on_issues)
+
+    def on_issues(self, project_id: int) -> None:
+        """Open the issues dialog."""
+        if not self.issues_dialog:
+            self.issues_dialog = IssuesDialog(self.iface)
+        if self.api_key:
+            self.issues_dialog.set_api_key(self.api_key)
+        if self.base_url:
+            self.issues_dialog.set_base_url(self.base_url)
+        self.issues_dialog.set_project_id(project_id)
+        self.issues_dialog.setup_custom_ui()
+        self.issues_dialog.show()
 
     def on_logoff(self) -> None:
         """Log off the user."""
