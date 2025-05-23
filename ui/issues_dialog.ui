@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>731</width>
-    <height>647</height>
+    <width>714</width>
+    <height>706</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -114,13 +114,13 @@
      <x>40</x>
      <y>460</y>
      <width>641</width>
-     <height>161</height>
+     <height>221</height>
     </rect>
    </property>
    <property name="title">
     <string>Export</string>
    </property>
-   <widget class="QRadioButton" name="radioButton">
+   <widget class="QRadioButton" name="exportAllRadioButton">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -133,7 +133,7 @@
      <string>All</string>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton_2">
+   <widget class="QRadioButton" name="exportSelectedRadioButton">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -146,11 +146,11 @@
      <string>Selected issues</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="exportButton">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>110</y>
+      <y>140</y>
       <width>311</width>
       <height>32</height>
      </rect>
@@ -159,8 +159,39 @@
      <string>Export</string>
     </property>
    </widget>
+   <widget class="QgsFileWidget" name="exportQgsFileWidget">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>100</y>
+      <width>421</width>
+      <height>27</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QProgressBar" name="exportProgressBar">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>180</y>
+      <width>591</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>24</number>
+    </property>
+   </widget>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QgsFileWidget</class>
+   <extends>QWidget</extends>
+   <header>qgsfilewidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
